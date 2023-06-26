@@ -20,7 +20,7 @@
 -- SHOW TABLES;
 
 -- 10. Explore the employees table. What different data types are present on this table?
--- emp_no , birth_date , first_name , last_name , gender , hire
+-- int , date , varchar , enum
 
 -- 11. Which table(s) do you think contain a numeric type column? (Write this question and your answer in a comment)
 -- salaries , emp_no
