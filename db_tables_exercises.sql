@@ -23,13 +23,13 @@
 -- int , date , varchar , enum
 
 -- 11. Which table(s) do you think contain a numeric type column? (Write this question and your answer in a comment)
--- salaries , emp_no
+-- all
 
 -- 12. Which table(s) do you think contain a string type column? (Write this question and your answer in a comment)
--- first_name , last_name , gender
+--  all except salaries
 
 -- 13. Which table(s) do you think contain a date type column? (Write this question and your answer in a comment)
--- birth_date , hire_date
+-- dept_emp , dept_manager , employees , salaries , titles
 
 -- 14. What is the relationship between the employees and the departments tables? (Write this question and your answer in a comment)
 -- They are two seperate tables in the same databse.
