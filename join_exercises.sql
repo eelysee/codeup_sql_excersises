@@ -11,6 +11,8 @@
 
 -- 1. Use the employees database.
 
+USE employees;
+
 -- 2. Using the example in the Associative Table Joins section as a guide, write a query that shows each department 
 -- along with the name of the current manager for that department.
 
@@ -117,7 +119,7 @@ Sales              | Hauke Zhang       | 101987
 
 -- 6. Find the number of current employees in each department.
 
-SELECT departments.dept_no, dept_name , COUNT(departments.dept_no) AS 'num_employees' 
+SELECT departments.dept_no, dept_name , COUNT(departments.dept_no) AS 'num_employees' -- '' arnt necesary when there is no space
 FROM departments
 JOIN dept_emp ON departments.dept_no = dept_emp.dept_no
 WHERE dept_emp.to_date >= NOW()
@@ -142,30 +144,73 @@ GROUP BY departments.dept_no
 
 -- 7. Which department has the highest average salary? Hint: Use current not historic information.
 
+SELECT departments.dept_name AS dept_name , AVG(salaries.salary) AS average_salary
+FROM salaries
+JOIN dept_emp ON dept_emp.emp_no = salaries.emp_no 
+JOIN departments ON departments.dept_no = dept_emp.dept_no
+WHERE dept_emp.to_date >= NOW()
+AND salaries.to_date >= NOW()
+GROUP BY departments.dept_name
+ORDER BY  average_salary DESC
+LIMIT 1
+;
 
+/*
 +-----------+----------------+
 | dept_name | average_salary |
 +-----------+----------------+
 | Sales     | 88852.9695     |
 +-----------+----------------+
+*/
 
 8. Who is the highest paid employee in the Marketing department?
 
 
+
+/*
 +------------+-----------+
 | first_name | last_name |
 +------------+-----------+
 | Akemi      | Warwick   |
 +------------+-----------+
+*/
+
 
 9. Which current department manager has the highest salary?
 
+SELECT employees.first_name , employees.last_name, salary, departments.dept_name AS dept_name
+FROM dept_manager
+JOIN employees ON employees.emp_no = dept_manager.emp_no 
+JOIN departments ON departments.dept_no = dept_manager.dept_no
+JOIN salaries on salaries.emp_no = employees.emp_no
+WHERE dept_manager.to_date >= NOW()
+AND salaries.to_date >= NOW()
+ORDER BY Salary DESC
+LIMIT 1
+;
+
+/*
+# Partial code awnsering wrong question
+SELECT employees.first_name , employees.last_name , salary , departments.dept_name AS dept_name
+FROM salaries
+JOIN dept_emp ON dept_emp.emp_no = salaries.emp_no 
+JOIN departments ON departments.dept_no = dept_emp.dept_no
+JOIN employees ON dept_emp.emp_no = employees.emp_no 
+WHERE dept_emp.to_date >= NOW()
+AND salaries.to_date >= NOW()
+AND dept_manager.to_date >= NOW()
+# Do I need to make sure it is a current manager as there will always be current employee
+# Yes because they could have been demoted
+ORDER BY salary DESC
+LIMIT 1
+;
 
 +------------+-----------+--------+-----------+
 | first_name | last_name | salary | dept_name |
 +------------+-----------+--------+-----------+
 | Vishwani   | Minakawa  | 106491 | Marketing |
 +------------+-----------+--------+-----------+
+*/
 
 10. Determine the average salary for each department. Use all salary information and round your results.
 
