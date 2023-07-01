@@ -6,19 +6,20 @@
 
 
 -- 1. Find all the current employees with the same hire date as employee 101010 using a subquery.
---55 rows returned in exapmle
---re do this one
 
 SELECT first_name , last_name
-FROM dept_emp
-JOIN employees ON employees.emp_no = dept_emp.emp_no
-WHERE to_date >= CURDATE()
-AND
+FROM employees
+WHERE hire_date =
 	(
 	SELECT hire_date
-	FROM employees
-	WHERE emp_no = '101010'
-    AND to_date >= CURDATE()
+    FROM employees
+    WHERE emp_no = 101010
+    )
+AND emp_no IN
+	(
+    SELECT emp_no
+	FROM dept_emp
+	WHERE to_date <= CURDATE()
 	)
 ;
 
@@ -65,24 +66,16 @@ AND emp_no IN
     SELECT emp_no
     FROM dept_manager
     WHERE emp_no 
-    AND WHERE CURDATE() < to_date IN
+    AND CURDATE() < to_date
 	)
 /*
 'Isamu Legleitner'
-'Shirish Ossenbruggen'
 'Karsten Sigstam'
-'Krassimir Wegerle'
-'Rosine Cools'
 'Leon DasSarma'
-'Peternela Onuegbe'
-'Rutger Hofmeyr'
-'Sanjoy Quadeer'
 'Hilary Kambil'
-'Tonny Butterworth'
-'Marjo Giarratana'
-'Xiaobin Spinelli'
 */
 ;
+
 
 -- 5. Find all the employees who currently have a higher salary than the companies overall, historical average salary.
 
