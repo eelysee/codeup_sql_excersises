@@ -253,7 +253,19 @@ ORDER BY average_salary DESC
 | Human Resources    | 55575          |
 +--------------------+----------------+
 
-11. Bonus Find the names of all current employees, their department name, and their current manager's name.
+-- 11. Bonus Find the names of all current employees, their department name, and their current manager's name.
+
+# GOT IT !!!!!!!!!!
+
+SELECT CONCAT(employees.first_name, ' ', employees.last_name) AS 'Employee Name' , 
+departments.dept_name AS 'Department Name' , 
+CONCAT(employees.first_name, ' ', employees.last_name) AS 'Manager Name'
+FROM employees
+LEFT JOIN dept_manager ON employees.emp_no = dept_manager.emp_no 
+LEFT JOIN dept_emp ON employees.emp_no = dept_emp.emp_no
+LEFT JOIN departments ON dept_emp.dept_no = departments.dept_no
+WHERE dept_emp.to_date >= CURDATE()
+;
 
 -- could not figure it out with only Joins. Could not get the FULL JOINS to work.
 -- the sub queries work though
@@ -269,8 +281,30 @@ JOIN dept_emp ON employees.emp_no = dept_emp.emp_no
 WHERE dept_emp.to_date >= CURDATE()
 AND dept_manager.to_date >= CURDATE()
 ;
-
 */
+
+
+-- attmpt 3 Still not working
+
+
+/*
+SELECT CONCAT(employees.first_name, ' ', employees.last_name) AS 'Employee Name' , 
+departmentsdept_name AS 'Department Name' , 
+CONCAT(employees.first_name, ' ', employees.last_name) AS 'Manager Name'
+FROM employees
+LEFT JOIN dept_manager ON employees.emp_no = dept_manager.emp_no 
+LEFT JOIN dept_emp ON employees.emp_no = dept_emp.emp_no
+WHERE dept_emp.dept_no IN
+	(
+    SELECT *
+    FROM departments
+    )
+AND dept_emp.to_date >= CURDATE()
+AND dept_manager.to_date >= CURDATE()
+;
+*/
+
+
 
 240,124 Rows
 
