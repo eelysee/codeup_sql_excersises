@@ -165,7 +165,16 @@ LIMIT 1
 
 8. Who is the highest paid employee in the Marketing department?
 
-
+SELECT first_name , last_name
+FROM employees
+JOIN salaries ON employees.emp_no = salaries.emp_no
+JOIN dept_emp ON dept_emp.emp_no = employees.emp_no
+JOIN departments on departments.dept_no = dept_emp.dept_no
+WHERE departments.dept_name = 'Marketing'
+# AND dept_emp.to_date <= CURDATE()
+ORDER BY salaries.salary DESC
+LIMIT 1
+;
 
 /*
 +------------+-----------+
@@ -214,6 +223,13 @@ LIMIT 1
 
 10. Determine the average salary for each department. Use all salary information and round your results.
 
+SELECT departments.dept_name , ROUND(AVG(salary)) AS average_salary
+FROM salaries
+JOIN dept_emp ON dept_emp.emp_no = salaries.emp_no
+JOIN departments on departments.dept_no = dept_emp.dept_no
+GROUP BY dept_name
+ORDER BY average_salary DESC
+;
 
 +--------------------+----------------+
 | dept_name          | average_salary | 
@@ -239,6 +255,22 @@ LIMIT 1
 
 11. Bonus Find the names of all current employees, their department name, and their current manager's name.
 
+-- could not figure it out with only Joins. Could not get the FULL JOINS to work.
+-- the sub queries work though
+
+/*
+SELECT CONCAT(employees.first_name, ' ', employees.last_name) AS 'Employee Name' , 
+departments.dept_name AS 'Department Name' , 
+CONCAT(employees.first_name, ' ', employees.last_name) AS 'Manager Name'
+FROM employees
+JOIN dept_manager ON employees.emp_no = dept_manager.emp_no 
+JOIN departments ON departments.dept_no = dept_manager.dept_no
+JOIN dept_emp ON employees.emp_no = dept_emp.emp_no
+WHERE dept_emp.to_date >= CURDATE()
+AND dept_manager.to_date >= CURDATE()
+;
+
+*/
 
 240,124 Rows
 
