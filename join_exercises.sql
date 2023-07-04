@@ -91,7 +91,7 @@ Technique Leader   |   241
 
 -- 5. Find the current salary of all current managers.
 
-SELECT departments.dept_name AS 'Department Name' , CONCAT(employees.first_name, ' ', employees.last_name) AS 'NAME',
+SELECT departments.dept_name AS 'Department Name' , CONCAT(employees.first_name, ' ', employees.last_name) AS 'Name',
 Salary
 FROM dept_manager
 JOIN employees ON employees.emp_no = dept_manager.emp_no 

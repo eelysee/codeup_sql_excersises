@@ -103,6 +103,47 @@ WHERE emp_no IN
 
 -- 6. How many current salaries are within 1 standard deviation of the current highest salary? (Hint: you can use a built in function to calculate the standard deviation.) What percentage of all salaries is this?
 
+SELECT emp_no
+FROM salaries
+WHERE to_date >= CURDATE()
+GROUP BY emp_no
+HAVING STD(salary) > 1
+;
+
+-- 
+
+SELECT COUNT(*)
+FROM
+	(
+	SELECT emp_no
+	FROM salaries
+	WHERE to_date >= CURDATE()
+	GROUP BY emp_no
+    HAVING STD(salary) > 1
+	) AS Deviation
+;
+
+-- Percentage
+-- Doesn't work yet. Need ot add a subquery in teh selct and another later in the where collom.
+/*
+SELECT percent
+From salaries
+WHERE perecent = (Base / COUNT(*)) * 100
+AND
+	(
+	SELECT COUNT(*)
+	FROM
+		(
+		SELECT emp_no
+		FROM salaries
+		WHERE to_date >= CURDATE()
+		GROUP BY emp_no
+		HAVING STD(salary) > 1
+		) AS Deviation
+	) AS Base
+;
+*/
+
 -- Hint You will likely use multiple subqueries in a variety of ways
 -- Hint It's a good practice to write out all of the small queries that you can. Add a comment above the query showing the number of rows returned. You will use this number (or the query that produced it) in other, larger queries.
 -- BONUS
