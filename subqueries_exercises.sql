@@ -124,7 +124,7 @@ FROM
 ;
 
 -- Percentage
--- Doesn't work yet. Need ot add a subquery in teh selct and another later in the where collom.
+-- Doesn't work yet. Need ot add a subquery in teh selct and another later in the where column.
 /*
 SELECT percent
 From salaries
@@ -149,7 +149,140 @@ AND
 -- BONUS
 
 -- 1. Find all the department names that currently have female managers.
+
+SELECT dept_name
+FROM departments
+WHERE dept_no IN
+	(
+	SELECT dept_no
+	FROM dept_emp
+	WHERE to_date >= CURDATE()
+    AND emp_no IN
+			(
+		SELECT emp_no
+		FROM employees
+		WHERE gender = 'F'
+		AND emp_no IN
+				(
+				SELECT emp_no
+				FROM dept_manager
+				WHERE to_date >= CURDATE()
+				)
+			)
+	)
+;
+
 -- 2. Find the first and last name of the employee with the highest salary.
+
+
+SELECT first_name , last_name
+FROM employees
+WHERE emp_no =
+	(
+    SELECT emp_no
+	FROM salaries
+    ORDER BY salary DESC
+    LIMIT 1
+    )
+;
+
 -- 3. Find the department name that the employee with the highest salary works in.
 
+-- extra sub query just for style points
+
+SELECT dept_name
+FROM departments
+WHERE dept_no =
+	(
+    SELECT dept_no
+    FROM dept_emp
+    WHERE emp_no =
+		(
+		SELECT emp_no
+		FROM employees
+		WHERE emp_no =
+			(
+			SELECT emp_no
+			FROM salaries
+			ORDER BY salary DESC
+			LIMIT 1
+			)
+		)
+	)
+;
+
 -- 4. Who is the highest paid employee within each department.
+
+-- skeleton #3
+-- I can just do 9 differst sub queries inside of first to bring out a list of the employees, without using an advanced feature like a union
+/*
+SELECT first_name , last_name 
+FROM employees
+WHERE emp_no IN
+	(
+    SELECT emp_no
+    FROM dept_emp
+    WHERE 
+    AND emp_no =
+		(
+        SELECT salary
+        FROM salaries
+        WHERE dept_no
+        )
+	OR
+    OR
+    OR
+    OR
+    OR
+    OR
+    OR
+    OR
+    )
+;
+
+SELECT dept_name
+FROM departments
+WHERE dept_no =
+	(
+    SELECT dept_no
+    FROM dept_emp
+    WHERE emp_no =
+		(
+		SELECT emp_no
+		FROM employees
+		WHERE emp_no =
+			(
+			SELECT emp_no
+			FROM salaries
+			ORDER BY salary DESC
+			LIMIT 1
+			)
+		)
+	)
+;
+*/
+
+/*
+-- can't get the distinct departmesnt.dept_name and there is no aggregate function to group by
+
+SELECT  employees.first_name , employees.last_name , departments.dept_name
+FROM employees
+JOIN salaries ON employees.emp_no = salaries.emp_no
+JOIN dept_emp ON dept_emp.emp_no = employees.emp_no
+JOIN departments on departments.dept_no = dept_emp.dept_no 
+# GROUP BY departments.dept_name
+ORDER BY salary DESC
+;
+*/
+
+/*
+-- skeleton
+
+SELECT first_name , last_name , dept
+FROM emplo
+
+SELECT DISTINCT dept_no
+
+ORDER BY salary DESC
+;
+*/
