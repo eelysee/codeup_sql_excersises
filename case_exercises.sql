@@ -8,7 +8,7 @@
 -- 1. Write a query that returns all employees, their department number, their start date, their end date, 
 -- and a new column 'is_current_employee' that is a 1 if the employee is still with the company and 0 if not. DO NOT WORRY ABOUT DUPLICATE EMPLOYEES.
 
-SELECT * , IF(to_date < CURDATE() , 1 , 0) AS is_current_employee
+SELECT * , IF(to_date < CURDATE() , 0 , 1) AS is_current_employee
 FROM employees
 JOIN dept_emp ON employees.emp_no = dept_emp.emp_no
 ;
@@ -29,7 +29,7 @@ FROM employees
 
 SELECT COUNT(emp_no) ,
 	CASE
-		WHEN SUBSTR(birth_date ,1 , 3) = '196' THEN "60's"
+		WHEN SUBSTR(birth_date ,1 , 3) = 196 THEN "60's"
         ELSE "50's"
 	END AS ERA
 FROM employees
@@ -56,6 +56,13 @@ GROUP BY dept_group
 -- BONUS
 
 -- Remove duplicate employees from exercise 1.
+
+
+SELECT DISTINCT (employees.emp_no) , first_name , last_name , 
+IF(to_date < CURDATE() , 0 , 1) AS is_current_employee
+FROM employees
+JOIN dept_emp ON employees.emp_no = dept_emp.emp_no
+
 
 /*
 
