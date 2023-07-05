@@ -58,11 +58,15 @@ GROUP BY dept_group
 -- Remove duplicate employees from exercise 1.
 
 
+/*
+
+- not distinct
+
 SELECT DISTINCT (employees.emp_no) , first_name , last_name , 
 IF(to_date < CURDATE() , 0 , 1) AS is_current_employee
 FROM employees
 JOIN dept_emp ON employees.emp_no = dept_emp.emp_no
-
+*/
 
 /*
 
