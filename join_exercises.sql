@@ -1,13 +1,33 @@
-
 -- Join Example Database
+
+USE join_example_db
+;
+
 -- Use the join_example_db. Select all the records from both the users and roles tables.
+
+SELECT *
+FROM users 
+LEFT JOIN roles ON roles.id = users.role_id
+;
 
 -- Use join, left join, and right join to combine results from the users and roles tables as we did in the lesson. 
 -- Before you run each query, guess the expected number of results.
 
+SELECT *
+FROM users 
+LEFT JOIN roles ON roles.id = users.role_id
+;
+
+
 -- Although not explicitly covered in the lesson, aggregate functions like count can be used with join queries. 
 -- Use count and the appropriate join type to get a list of roles along with the number of users that has the role. 
 -- Hint: You will also need to use group by in the query.
+
+SELECT roles.name , COUNT(users.name)
+FROM users 
+JOIN roles ON roles.id = users.role_id
+GROUP BY roles.name
+;
 
 -- 1. Use the employees database.
 
