@@ -272,27 +272,128 @@ LEFT JOIN actor ON customer.last_name = actor.last_name
 
 rodger dodger
 
--- Select the customer first_name/last_name and actor first_name/last_name columns from performing a /right join between the customer and actor column on the last_name column in each table. (i.e. customer.last_name = actor.last_name)
+-- Select the customer first_name/last_name and actor first_name/last_name columns from performing a /right join between the customer and actor column on the last_name column in each table. 
+--(i.e. customer.last_name = actor.last_name)
+
+SELECT customer.first_name , customer.last_name , actor.first_name , actor.last_name
+FROM customer
+RIGHT JOIN actor ON customer.last_name = actor.last_name
+;
+
 -- returns correct number of records: 200
--- Select the customer first_name/last_name and actor first_name/last_name columns from performing an inner join between the customer and actor column on the last_name column in each table. (i.e. customer.last_name = actor.last_name)
+
+affirmative
+
+-- Select the customer first_name/last_name and actor first_name/last_name columns from performing an inner join between the customer and actor column on the last_name column in each table. 
+--(i.e. customer.last_name = actor.last_name)
+
+SELECT customer.first_name , customer.last_name , actor.first_name , actor.last_name
+FROM customer
+JOIN actor ON customer.last_name = actor.last_name
+;
+
 -- returns correct number of records: 43
+
+confirmed
+
 -- Select the city name and country name columns from the city table, performing a left join with the country table to get the country name column.
+
+SELECT city , country
+FROM city
+LEFT JOIN country ON city.country_id = country.country_id
+;
+
 -- Returns correct records: 600
+
+correct
+
 -- Select the title, description, release year, and language name columns from the film table, performing a left join with the language table to get the "language" column.
+
+SELECT title , description , release_year , language.name
+FROM film
+LEFT JOIN language ON film.language_id = language.language_id
+;
+
 -- Label the language.name column as "language"
+
+SELECT title , description , release_year , language.name AS language
+FROM film
+LEFT JOIN language ON film.language_id = language.language_id
+;
+
 -- Returns 1000 rows
--- Select the first_name, last_name, address, address2, city name, district, and postal code columns from the staff table, performing 2 left joins with the address table then the city table to get the address and city related columns.
+
+True
+
+-- Select the first_name, last_name, address, address2, city name, district, and postal code columns from the staff table, performing 2 left 
+-- joins with the address table then the city table to get the address and city related columns.
+
+SELECT first_name , last_name , address , address2 , city.city AS 'city name' , district , postal_code
+FROM staff
+LEFT JOIN address ON staff.address_id = address.address_id
+LEFT JOIN city ON address.city_id = city.city_id 
+;
+
 -- returns correct number of rows: 2
+
+exactly
 
 
 -- 1. Display the first and last names in all lowercase of all the actors.
+
+SELECT LOWER(first_name) , LOWER(last_name)
+FROM actor
+;
+
 -- 2. You need to find the ID number, first name, and last name of an actor, of whom you know only the first name, "Joe." What is one query would you could use to obtain this information?
+
+SELECT first_name , last_name , actor_id 
+FROM actor
+WHERE LOWER(first_name) = 'joe'
+;
+
 -- 3. Find all actors whose last name contain the letters "gen":
+
+SELECT *
+FROM actor
+WHERE LOWER(last_name) LIKE '%gen%'
+;
+
 -- 4. Find all actors whose last names contain the letters "li". This time, order the rows by last name and first name, in that order.
+
+SELECT *
+FROM actor
+WHERE LOWER(last_name) LIKE '%li%'
+ORDER BY last_name , first_name
+;
+
 -- 5. Using IN, display the country_id and country columns for the following countries: Afghanistan, Bangladesh, and China:
+
+SELECT country_id , country
+FROM country
+WHERE LOWER(country) IN ('afghanistan' , 'bangladesh' , 'china')
+;
+
 -- 6. List the last names of all the actors, as well as how many actors have that last name.
+
+SELECT last_name , COUNT(last_name) AS 'Related?'
+FROM actor
+GROUP BY last_name
+;
+
 -- 7. List last names of actors and the number of actors who have that last name, but only for names that are shared by at least two actors
+
+SELECT last_name , COUNT(last_name) AS 'Related?'
+FROM actor
+GROUP BY last_name
+HAVING COUNT(last_name) > 2
+;
+
 -- 8. You cannot locate the schema of the address table. Which query would you use to re-create it?
+
+DESC address
+;
+
 -- 9. Use JOIN to display the first and last names, as well as the address, of each staff member.
 -- 10. Use JOIN to display the total amount rung up by each staff member in August of 2005.
 -- 11. List each film and the number of actors who are listed for that film.
