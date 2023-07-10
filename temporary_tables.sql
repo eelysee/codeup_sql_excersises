@@ -87,6 +87,28 @@ FROM salaries
 WHERE to_date >= CURDATE()
 ;
 
+/*
+
+-- cant' get this to work with TEMP tables
+
+SELECT * FROM somerville_2274.temp_payments;
+-- Calculated the average salary and z-score for each department
+SELECT departments.dept_name, AVG(salaries.salary) AS department_average_salary, (AVG(salaries.salary) - overall_avg.avg_salary) / overall_avg.std_dev AS z_score
+FROM salaries
+INNER JOIN dept_emp on salaries.emp_no = dept_emp.emp_no
+INNER JOIN departments ON dept_emp.dept_no = departments.dept_no
+INNER JOIN (
+  -- Subquery to get the overall average salary and standard deviation
+  SELECT AVG(salary) AS avg_salary, STDDEV(salary) AS std_dev
+  FROM salaries
+  WHERE to_date >= CURDATE()
+) overall_avg ON 1 = 1
+WHERE dept_emp.to_date >= CURDATE()
+GROUP BY departments.dept_name, overall_avg.avg_salary -- included the non-aggregated column
+ORDER BY z_score DESC;
+SELECT * FROM somerville_2273.temp_payments;
+*/
+
 -- Finding and using the z-score
 -- A z-score is a way to standardize data and compare a data point to the mean of the sample.
 /*
