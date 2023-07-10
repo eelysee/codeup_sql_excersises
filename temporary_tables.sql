@@ -50,15 +50,42 @@ LEFT JOIN employees.departments on dept_emp.dept_no = departments.dept_no
 ;
 
 -- 2.Create a temporary table based on the payment table from the sakila database.
+
+CREATE TEMPORARY TABLE somerville_2274.payment AS
+SELECT *
+FROM sakila.payment
+;
+
 -- Write the SQL necessary to transform the amount column such that it is stored as an integer 
 -- representing the number of cents of the payment. 
 -- For example, 1.99 should become 199.
+
+ALTER TABLE somerville_2274.payment
+MODIFY amount VARCHAR(10)
+;
+
+UPDATE somerville_2274.payment
+SET amount = amount * 100
+;
+
+ALTER TABLE somerville_2274.payment
+MODIFY amount INT
+;
+
 
 
 
 -- 3. Go back to the employees database. Find out how the current average pay in each department compares to the overall 
 -- current pay for everyone at the company. For this comparison, you will calculate the z-score for each salary. 
 -- In terms of salary, what is the best department right now to work for? The worst?
+
+USE employees;
+
+CREATE TEMPORARY TABLE  somerville_2274.z_score AS
+SELECT AVG(salary) AS 'Average Salary', STDDEV(salary) AS 'Standars Deviation'
+FROM salaries
+WHERE to_date >= CURDATE()
+;
 
 -- Finding and using the z-score
 -- A z-score is a way to standardize data and compare a data point to the mean of the sample.
