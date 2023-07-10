@@ -395,17 +395,127 @@ DESC address
 ;
 
 -- 9. Use JOIN to display the first and last names, as well as the address, of each staff member.
+
+SELECT first_name , last_name , address 
+FROM staff
+LEFT JOIN address ON staff.address_id = address.address_id
+LEFT JOIN city ON address.city_id = city.city_id 
+;
+
 -- 10. Use JOIN to display the total amount rung up by each staff member in August of 2005.
+
+SELECT username , SUM(amount)
+FROM staff
+JOIN payment on staff.staff_id = payment.staff_id
+GROUP BY username
+;
+
 -- 11. List each film and the number of actors who are listed for that film.
+
+SELECT title , COUNT(actor_id)
+FROM film
+RIGHT JOIN film_actor on film.film_id = film_actor.film_id
+GROUP BY title
+; 
+
 -- 12. How many copies of the film Hunchback Impossible exist in the inventory system?
--- 13. The music of Queen and Kris Kristofferson have seen an unlikely resurgence. As an unintended consequence, films starting with the letters K and Q have also soared in popularity. Use subqueries to display the titles of movies starting with the letters K and Q whose language is English.
+
+SELECT title , COUNT(title)
+FROM film
+RIGHT JOIN inventory on film.film_id = inventory.film_id
+WHERE LOWER(title) = 'hunchback impossible'
+GROUP BY title
+; 
+
+-- 13. The music of Queen and Kris Kristofferson have seen an unlikely resurgence. As an unintended consequence, films starting with the letters K and Q have also soared in popularity.
+--  Use subqueries to display the titles of movies starting with the letters K and Q whose language is English.
+
+SELECT title
+FROM film
+WHERE LOWER(title) LIKE 'k%' 
+OR LOWER(title) LIKE'q%'
+AND language_id =
+	(
+    SELECT language_id
+	FROM language
+    WHERE name = 'English'
+    )	
+;
+
 -- 14. Use subqueries to display all actors who appear in the film Alone Trip.
+
+SELECT CONCAT(first_name,'  ' , last_name) AS 'Alone Trip Cast'
+FROM actor
+WHERE actor_id IN
+	(
+    SELECT actor_id
+	FROM film_actor
+    WHERE film_id =
+		(SELECT film_id
+        FROM film
+        WHERE title = 'Alone Trip'
+        )
+	)
+; 
+
 -- 15. You want to run an email marketing campaign in Canada, for which you will need the names and email addresses of all Canadian customers.
+
+SELECT first_name , last_name , email
+FROM customer
+WHERE address_id IN
+    (SELECT address_id
+    FROM address
+    WHERE city_id IN
+        (SELECT city_id
+        FROM city
+        WHERE country_id =
+            (SELECT country_id
+            FROM country
+            WHERE LOWER(country) = 'canada'
+            )      
+        )    
+    )
+;
+
 -- 16. Sales have been lagging among young families, and you wish to target all family movies for a promotion. Identify all movies categorized as famiy films.
+
+SELECT title , category.name AS Category
+FROM film
+LEFT JOIN film_category on film.film_id = film_category.film_id
+LEFT JOIN category on film_category.category_id = category.category_id
+WHERE LOWER(category.name) = 'family'
+;
+
 -- 17. Write a query to display how much business, in dollars, each store brought in.
+
+SELECT store.store_id , SUM(payment.amount) AS 'Business in Dollars'
+FROM payment
+LEFT JOIN staff ON payment.staff_id = staff.staff_id
+LEFT JOIN store ON staff.staff_id = store.manager_staff_id
+GROUP BY store.store_id
+;
+
 -- 18. Write a query to display for each store its store ID, city, and country.
+
+SELECT store_id , city , country
+FROM store
+JOIN address ON store.address_id = address.address_id
+JOIN city ON address.city_id = city.city_id
+JOIN country ON city.country_id = country.country_id
+;
+
 -- 19. List the top five genres in gross revenue in descending order. (Hint: you may need to use the following tables: category, film_category, inventory, payment, and rental.)
 
+SELECT category.name AS Genre , SUM(payment.amount)
+FROM payment 
+LEFT JOIN rental ON payment.rental_id = rental.rental_id
+LEFT JOIN inventory ON rental.inventory_id = inventory.inventory_id
+LEFT JOIN film_category on inventory.film_id = film_category.film_id
+LEFT JOIN category on film_category.category_id = category.category_id
+GROUP BY category.name
+ORDER BY SUM(payment.amount) DESC
+LIMIT 5
+;
 
 -- 1. What is the average replacement cost of a film? Does this change depending on the rating of the film?
 
